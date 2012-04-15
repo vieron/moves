@@ -1,0 +1,131 @@
+.scroll {
+  position:relative;
+  overflow:hidden;
+}
+
+.scroll ul {
+  list-style:none;
+}
+
+.scroll ul > li {
+  display:block;
+}
+
+
+.scroll-h,
+.slider {
+  width:100%;
+/*  float:left;*/
+  overflow:hidden;
+}
+
+.scroll-h {
+  float:left;
+}
+
+.scroll-h ul,
+.slider ul{
+  white-space:nowrap;
+  float:left;
+  overflow:hidden;
+}
+
+.scroll-h ul li img{
+  max-width:100%;
+}
+
+.scroll-h ul li,
+.slider ul li{
+  white-space:auto;
+  display:block;
+  float:left;
+  width:inherit;
+  text-overflow: ellipsis;
+}
+
+.scroll-paged ul li,
+.slider ul li{
+  text-align:center;
+}
+
+.slider ul li img {
+  max-width:100%;
+}
+
+
+.slider .slider-arrow {
+  display:inline-block;
+  padding:10px;
+}
+
+.slider .slider-pager {
+  
+}
+
+.slider .slider-pager a{
+  padding:10px;
+  display:inline-block;
+}
+
+.slider .slider-pager .active{
+  background:yellow;
+}
+
+
+/**
+ *
+ * Horizontal Scrollbar
+ *
+ */
+.scrollH {
+	position:absolute;
+	z-index:100;
+	height:7px;
+	bottom:1px;
+	left:2px;
+	right:7px
+}
+
+.scrollH > div {
+	height:100%;
+}
+
+
+/**
+ *
+ * Vertical Scrollbar
+ *
+ */
+.scrollV {
+	position:absolute;
+	z-index:100;
+	width:7px;bottom:7px;top:2px;right:1px
+}
+
+.scrollV > div {
+	width:100%;
+}
+
+/**
+ *
+ * Both Scrollbars
+ *
+ */
+.scrollH > div,
+.scrollV > div {
+	position:absolute;
+	z-index:100;
+
+	/* The following is probably what you want to customize */
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-o-box-sizing:border-box;
+	box-sizing:border-box;
+	
+	border-width:3px;
+	-webkit-border-image:url(../images/scrollbar.png) 6 6 6 6;
+	-moz-border-image:url(../images/scrollbar.png) 6 6 6 6;
+	-o-border-image:url(../images/scrollbar.png) 6 6 6 6;
+	border-image:url(../images/scrollbar.png) 6 6 6 6;
+}
+

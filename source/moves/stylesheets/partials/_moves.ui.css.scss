@@ -1,0 +1,13 @@
+.ui-list > li{
+  background:#FFF;
+  border-top:1px solid #CCC;
+  -webkit-tap-highlight-color:red;
+}
+
+.ui-list > li a{
+  display:block;
+  padding:12px 10px;
+  text-decoration:none;
+  font-family:Verdana;
+  font-size:12px;
+}
