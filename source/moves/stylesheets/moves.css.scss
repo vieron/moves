@@ -1,5 +1,14 @@
 @import "compass";
 
+@import "partials/_moves.base.css.scss";
+@import "partials/_moves.core.css.scss";
+@import "partials/_moves.ui.css.scss";
+
+@import "modules/_moves.scroll.css.scss";
+@import "modules/_moves.transition.css.scss";
+
+@import "partials/_moves.mediaqueries.css.scss";
+
 $link-color:         #0388a6;
 $link-hover-color:   #009ce0;
 $link-focus-color:   false;
@@ -19,11 +28,3 @@ $side-gutter-width: $gutter-width;
 @include global-reset;
 
 
-@import "partials/_moves.base.css";
-@import "partials/_moves.core.css";
-@import "partials/_moves.ui.css";
-
-@import "modules/_moves.scroll.css";
-@import "modules/_moves.transition.css";
-
-@import "partials/_moves.mediaqueries.css";
