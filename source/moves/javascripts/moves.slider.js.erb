@@ -17,7 +17,7 @@
   var opts = {
     dependencies : [{
         test : typeof iScroll ,
-        yep : '/moves/javascripts/libs/iscroll.js',
+        yep : "<%= (settings.basepath+settings.js_dir+'/libs/iscroll.js') %>",
         callback : function(){
           console.log('loaded iScroll');
         }

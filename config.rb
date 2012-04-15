@@ -59,6 +59,8 @@
 #   end
 # end
 
+set :basepath, "/"
+
 # Change the CSS directory
 set :css_dir, "moves/stylesheets"
 
@@ -88,5 +90,9 @@ configure :build do
   # activate :smusher
   
   # Or use a different image path
-  # set :http_path, "/Content/images/"
+   set :basepath, "/moves/"
 end
+
+
+
+
