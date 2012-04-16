@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     
-      <title>Moves.Layout</title>
+      <title>Moves.Slider</title>
 
     <!-- <meta name="description" content=""> -->
 
@@ -56,31 +56,35 @@
       <h1>Título</h1>
     </div>
 
-      <div data-role="content">
-        <div class="scroll scroll-h scroll-paged">
-          <ul>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-            <li> <img src="http://placehold.it/200x200"></li>
-          </ul>
-        </div><!-- .scroll -->
-      </div><!-- .content -->
   
+
+      <div data-role="content">
+     
+                <div class="slider">
+                  <ul>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                    <li> <img src="http://placehold.it/600x200"></li>
+                  </ul>
+                </div><!-- .slider -->
+        
+      </div><!-- .content -->
+
     <div data-role="footer">
       <a href="#">action1</a>
     </div>
@@ -93,15 +97,20 @@
       <script type="text/javascript" charset="utf-8">
     Zepto(function(){
 
-      var Layout = new M.Layout();
+      M.dom.sliders = $('.slider');
+      // M.dom.main_layout = $('.layout');
+      // 
+      // var Layout = new M.Layout( M.dom.main_layout.first());
 
-      // Layout.ready(function(){  
-      //           
-      // })
+      var Sliders = [];
+      M.dom.sliders.each(function(){
+        Sliders.push( new M.Slider( $(this) ));
+      })
+
+      // Layout.ready(function(){});
 
     });
   </script>
-  
 
   </body>
 </html>
