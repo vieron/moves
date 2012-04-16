@@ -49,15 +49,15 @@
 
       
 
-<div data-role="page" class="layout">
-  <div class="row">
+<div data-role="page">
+
     <div data-role="header">
       <a href="#" class="back">Atras</a>
       <h1>Título</h1>
     </div>
-  </div><!-- .row -->
+
   
-   <div class="row layout-content-section">
+
       <div data-role="content">
         <div class="scroll">
           <ul>
@@ -209,13 +209,11 @@
         </div><!-- .scroll -->
         
       </div><!-- .content -->
-   </div><!-- .row -->
   
-  <div class="row">
     <div data-role="footer">
       <a href="#">action1</a>
     </div>
-  </div><!-- .row -->
+
 </div>
                                  
       <script src="../moves/javascripts/app.js?1334514030" type="text/javascript"></script>                                
@@ -225,13 +223,11 @@
     Zepto(function(){
 
       M.dom.sliders = $('.slider');
-      M.dom.main_layout = $('.layout');
 
-      var Layout = new M.Layout( M.dom.main_layout.first());
+      var Layout = new M.Layout();
 
       var Sliders = [];
       M.dom.sliders.each(function(){
-        console.log('NEWWWW sliderrrr!!')
         Sliders.push( new M.Slider( $(this) ) );
       })
 

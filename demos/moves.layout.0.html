@@ -52,15 +52,13 @@
 
 
 
-<div data-role="page" class="layout">
-  <div class="row">
+<div data-role="page">
+
     <div data-role="header">
       <a href="#" class="back">Atras</a>
       <h1>Título</h1>
     </div>
-  </div><!-- .row -->
-  
-   <div class="row layout-content-section">
+    
       <div data-role="content">
         <div class="scroll">
           <ul class="ui-list">
@@ -123,13 +121,10 @@
           </ul>
         </div><!-- .scroll -->
       </div><!-- .content -->
-   </div><!-- .row -->
   
-  <div class="row">
     <div data-role="footer">
       <a href="#">action1</a>
     </div>
-  </div><!-- .row -->
 </div>
 
                                  
@@ -139,9 +134,7 @@
       <script type="text/javascript" charset="utf-8">
     Zepto(function(){
 
-      M.dom.main_layout = $('.layout');
-
-      var Layout = new M.Layout( M.dom.main_layout.first());
+      var Layout = new M.Layout();
 
       // Layout.ready(function(){  
       //           
