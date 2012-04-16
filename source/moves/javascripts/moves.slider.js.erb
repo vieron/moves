@@ -9,9 +9,6 @@
 //</div>
 
 
-
-
-
 ;(function($, window, document, undefined ){
   
   var opts = {
@@ -28,6 +25,9 @@
   
   
   M.Slider.defaults = {
+    autoplay : true,
+    autoplayDelay : 3000,
+    autoplayStopAtAction : true,
     onresize : function(){},
     iScroll : {
       scrollbarClass : 'scroll',
@@ -36,6 +36,9 @@
     	hScrollbar: false,
     	vScrollbar: false,
     	scrollV : false,
+    	onTouchEnd : function(){
+    	  this.M_Slider.autoStop();
+    	},
     	onScrollEnd : function(){
     	  this.M_Slider.pager_items.removeClass('active').eq(this.currPageX).addClass('active');
       }
@@ -53,27 +56,27 @@
       this.slides_length = this.slides.length;
       
       $(window).on('resize', $.proxy(this.resize, this));
-      console.log('init', this.element)
       
-      this.createNextPrevNav();
-      this.createPager();
-      this.setSlidesWidths();
+      this.setSlidesWidths().createNextPrevNav().createPager();
     },
     
     init : function(element, options){
       this.iScroll = new iScroll( this.element[0] , this.options.iScroll);
       this.iScroll.M_Slider = this;
-      console.log('iScroll', this.iScroll);
+      
+      if (this.options.autoplay) this.play();
+      
+      return this;
     },
     
     setSlidesWidths : function(){
       this.element.find('ul > li').css('width', this.element.width());
+      return this;
     },
     
     createPager : function(){
       var onClickHandler = function(e){
-            console.log(e);
-            this.goTo( $(e.target).attr('href').replace('#', '') );
+            this.autoStop().goTo( $(e.target).attr('href').replace('#', '') );
             return false;
           },
           nav = '';
@@ -85,8 +88,9 @@
       this.pager = $('<nav class="slider-pager" />').html(nav).appendTo(this.element);
       this.pager_items = this.pager.find('a');
       this.pager_items.first().addClass('active');
-      this.pager.on('tap', 'a', $.proxy(onClickHandler, this));
-      return this.pager;
+      this.pager.on('click', 'a', $.proxy(onClickHandler, this));
+      
+      return this;
     },
     
     createNextPrevNav : function(){
@@ -96,23 +100,46 @@
         
       this.nav = $('<nav class="slider-nav" />').html(nav).appendTo(this.element);
       
-      this.nav.on('tap', 'a', function(){
+      this.nav.on('click', 'a', function(){
         var n = parseInt(that.iScroll.currPageX) + parseInt($(this).attr('data-increment'));
-        that.goTo(n);
+        that.autoStop().goTo(n);
       });
       
-      return this.nav;
+      return this;
     },
     
     goTo : function(n){
+      if (n=='next') n = this.iScroll.currPageX+1;
+      else if (n=='prev') n = this.iScroll.currPageX-1;
+      if (n >= this.slides_length) n = 0;
+      else if (n < 0) n = this.slides_length;
       this.iScroll.scrollToPage(n, 0, 800);
+    },
+    
+    play : function(){
+      var that = this;
+      this.autoplay_timer = setInterval(function(){
+        that.goTo('next');
+      }, this.options.autoplayDelay);
+      
+      return this;
+    },
+    
+    autoStop : function(){
+      if (this.options.autoplayStopAtAction) this.stop();
+      return this;
+    },
+    
+    stop : function(){
+      if (this.autoplay_timer) clearInterval(this.autoplay_timer);
+      return this;
     },
     
     resize : function(){
       this.setSlidesWidths();
       this.iScroll.refresh();
       this.options.onresize.call(this, this.viewport_calculated_height, this.page_sections_content_heights);
-      console.log('resize');
+      return this;
     }
     
   });

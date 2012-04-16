@@ -6,9 +6,7 @@
   <script type="text/javascript" charset="utf-8">
     Zepto(function(){
 
-      M.dom.main_layout = $('.layout');
-
-      var Layout = new M.Layout( M.dom.main_layout.first());
+      var Layout = new M.Layout();
 
       // Layout.ready(function(){  
       //           
@@ -20,22 +18,16 @@
 <% end%>
 
 <div data-role="page" class="layout">
-  <div class="row">
     <div data-role="header">
       <h1>Moves! Mobile/Tablet web framework</h1>
     </div>
-  </div><!-- .row -->
   
-  <div class="row">
     <div data-role="content">
-      <div class="layout">
-        <div data-role="page-sections" class="row cols-3">
 
-          <div data-role="section" class="layout-content-section">
+          <div data-role="section">
             <div data-role="header">
               <h2>Moves.Layout</h2>
             </div>
-            <div data-role="content">
               <div class="scroll">
                 <ul class="ui-list">
                   <li><a href="demos/moves.layout.0.html">moves.layout.0.html</a></li>
@@ -45,14 +37,12 @@
                   <li><a href="demos/moves.layout.4.html">moves.layout.4.html</a></li>
                 </ul>
               </div><!-- .scroll -->
-            </div>
           </div><!-- page-section -->
 
-          <div data-role="section" class="layout-content-section">
+          <div data-role="section">
             <div data-role="header">
               <h2>Moves.Slider</h2>
             </div>
-            <div data-role="content">
               <div class="scroll">
                 <ul class="ui-list">
                   <li><a href="demos/moves.slider.0.html">moves.slider.0.html</a></li>
@@ -62,19 +52,13 @@
                   <li><a href="demos/moves.slider.4.html">moves.slider.4.html</a></li>
                 </ul>
               </div><!-- .scroll -->
-            </div>
           </div><!-- page-section -->
 
-  
-        </div><!-- page-sections -->
-        
-      </div><!-- .layout -->
     </div><!-- .content -->
-  </div><!-- .role --> 
   
-  <div class="row">
+
     <div data-role="footer">
       <a href="#">Moves!</a>
     </div>
-  </div><!-- .row -->
+
 </div>

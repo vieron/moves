@@ -1,6 +1,8 @@
 var moves = M = { dom : {}};
 
-
+// =====================
+// = Class constructor =
+// =====================
 var Class = function(){ 
     
   var that = this,
@@ -56,7 +58,7 @@ var Class = function(){
     yepnope(opts.dependencies);
 
   }else{
-    console.log('init without yepnope')
+    console.log('init without yepnope');
     // this.init.apply(this, args);
     this.isReady = true;
   }
