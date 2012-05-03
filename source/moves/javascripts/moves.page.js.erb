@@ -1,0 +1,304 @@
+// MARKUP:
+//
+//<div class="slider">   <---- this class required
+// <ul>
+//   <li></li>
+//   <li></li>
+//   <li></li>
+// </ul>
+//</div>
+
+
+;(function($, window, document, undefined ){
+  
+  var opts = {
+    dependencies : [{
+        test : typeof History ,
+        yep : "<%= (settings.basepath+settings.js_dir+'/libs/zepto.history.js') %>",
+        callback : function(){
+          console.log('loaded zepto.history');
+        }
+    }]
+  };
+  
+  // M.Slider = new Class(opts);
+  M.Page = new Class(opts);
+  
+  M.Page.defaults = {
+    onresize : function(){},
+    subpage_class : '[data-'+M.device+'-subpage]',
+    page_class : '[data-role="page"]',
+    section_class : '[data-role="section"]',
+    ajaxify : true,
+    default_page_title : 'Untitled Page'
+  };
+  
+  M.Page.pages = {}
+  M.Page.history = [];
+  M.Page.history_active_index = 0;
+  
+  //Class methods and properties
+  M.Page.extend({
+    add : function(){
+      
+      
+    },
+    historyManager : function(){
+      var self = this;
+      
+      this.rootUrl = History.getRootUrl();
+      this.urls = [document.URL];
+      
+      History.Adapter.bind(window,'statechange', function(){
+        var State = History.getState(),
+            actualURL = document.URL;
+        
+        self.urls.push(actualURL);
+
+        console.log('############## HISTORY STATE CHANGE');
+        console.log('############## STATE INFO:', State.data, State.title, State.url);
+        
+        History.log(State.data, State.title, State.url);
+      
+        self.changePage( actualURL, State.title, State.data);
+      });
+      
+      
+      History.Adapter.bind(window,'anchorchange', function(){
+        var State = History.getState(),
+            actual_url = document.URL.slice(0, document.URL.lastIndexOf('#')),
+            prev_url = self.urls[self.urls.length-1],
+            actual_hash = document.URL.slice(document.URL.lastIndexOf('#')),
+            url_to_load = actual_hash,
+            onPageLoadedSuccess;
+        
+        console.log('############## HISTORY ANCHOR CHANGE');
+        console.log('############## ANCHOR INFO:', State.data, State.title, State.url);
+        console.log('############## PREV URL', self.urls[self.urls.length-1] );
+        console.log('############## ACTUAL URL', document.URL.slice(0, document.URL.lastIndexOf('#')))
+        console.log('############## ACTUAL HASH', document.URL.slice(document.URL.lastIndexOf('#')) );
+        
+        History.log(State.data, State.title, State.url);
+        
+        if (actual_url != prev_url) { // if the url also changes we preload the page, and then invoke replaceState with the hash to handle it behaviour
+          url_to_load = actual_url;
+          onPageLoadedSuccess = function(){
+            if (actual_hash.length > 1) History.replaceState( State.data, State.title, actual_hash);
+          }
+        }
+        
+        self.changePage( url_to_load, State.title, State.data, self.options.ajaxify, onPageLoadedSuccess || false);
+        
+      });
+    },
+    
+    getURLType : function(url, ajaxify){
+      ajaxify = (typeof ajaxify !== 'undefined') ? ajaxify : this.options.ajaxify ;
+      if (typeof url === 'string') {
+        if (url[0] == '#') page_type = 'dom-id-url';
+        else{
+          if      (ajaxify) page_type = 'ajax-url' ;
+          else    page_type = 'default-url' ;
+        }
+      }else{
+        page_type = 'default-url';
+        console.log('DEBE ESPECIFICAR UNA URL COMO STRING');
+      }
+      
+      return page_type;
+    },
+    
+    cleanDocument : function(doc){
+      // Prepare
+      			var result = String(doc).replace(/<\!DOCTYPE[^>]*>/i, '');
+              // .replace(/<(html|head|body|title|meta|script)([\s\>])/gi,'<div class="document-$1"$2')
+              // .replace(/<\/(html|head|body|title|meta|script)\>/gi,'</div>');
+              
+              var re = /<body\s*[^>]*>([\S\s]*?)<\/body>/i;
+              var match = re.exec(result);
+
+      return '<div>'+match[1]+'</div>';
+      
+    }
+  });
+  
+  
+  
+  
+  
+  //Instance methods and properties
+  M.Page.include({
+    before_init : function(element, options){
+      var that = this;
+      this.options = $.extend( {}, M.Page.defaults , options);
+      this.element = element || $(document.body);
+      this.updatePageDate();
+      this.$layouts = $('[data-role="page"]');
+      
+      $(window).on('resize', $.proxy(this.resize, this));
+    },
+    
+    init : function(element, options){
+  
+      M.Page.historyManager.call(this, element, options);
+      
+      return this;
+    },
+    
+    updatePageDate : function(){
+      this.pages = this.element.find(this.options.page_class);
+      this.subpages = this.pages.find(this.options.subpage_class);
+      
+      this.page_active = this.pages.first().addClass('ui-page-active');
+      // if (this.subpages.length > 1) 
+      this.subpage_active =  $(this.options.subpage_class, this.page_active).first().addClass('ui-subpage-active');
+      this.layout = new M.Layout(this.page_active);
+    },
+    
+    changePage : function(url, title, state_data, ajaxify, callback){
+      var self = this,
+          page_type = M.Page.getURLType.call(this,url , ajaxify),
+          $content = $('.ui-page-active [data-role="content"]').first();
+          
+      
+      var URL_types = {
+            'dom-id-url' : function(){
+              
+              var $target = this.element.find(url),
+                  is_page = $target.is(this.options.page_class),
+                  is_subpage = $target.is(this.options.subpage_class),
+                  is_section = $target.is(this.options.section_class);
+                  
+              console.log('dom-id-url', $target, $target.is(this.options.page_class), $target.is(this.options.subpage_class))
+              
+              if (is_page) { 
+                $('.ui-page-active').removeClass('ui-page-active');
+                this.page_active = $target.addClass('ui-page-active');
+                $('.ui-subpage-active').removeClass('ui-subpage-active');
+                this.subpage_class = this.page_active.find(this.options.subpage_class).first().addClass('ui-subpage-active');
+              }
+              
+              if (is_subpage || // is specific-device-subpage or
+                is_section && (!is_page && !is_subpage && $target.length > 0) ) { // is a section and DOM element exists, isn't a page and isn't a specific-device-subpage
+                $('.ui-subpage-active').removeClass('ui-subpage-active');
+                this.subpage_active = $target.addClass('ui-subpage-active');
+                $('.ui-page-active').removeClass('ui-page-active');
+                this.page_active = this.subpage_active.closest(this.options.page_class).addClass('ui-page-active');
+              }
+              
+              
+              this.layout = new M.Layout(this.page_active);
+              // document.location.hash = url.replace(this.rootURL,'');
+              
+            },
+            'ajax-url' : function(){
+              
+                      
+              $.ajax({
+                url : url,
+                success : function(data, textStatus, jqXHR){
+                  var $data = $(M.Page.cleanDocument(data)),
+                     $dataBody = $data,
+                     $menuChildren, contentHtml, $scripts;
+                     
+                     // Fetch the scripts
+                     $scripts = $dataBody.find('script');
+                     if ( $scripts.length ) {
+                       $scripts.remove();
+                     }
+              
+                     // Fetch the content
+                     contentHtml = $dataBody.html()
+                     if ( !contentHtml ) {
+                       document.location.href = url;
+                       return false;
+                     }
+                     
+                     console.log('ajax-url', "AJAX LOADED CONTENT");
+                     console.log('contentHtml',contentHtml);
+                     
+                     //prepend the loaded content
+                     $content = $('<div data-role="document" />').prependTo(document.body);
+                     $content.html(contentHtml);
+                     //remove old pages
+                     self.pages.remove();
+                     //update new page and subpage data references  
+                     self.updatePageDate();
+                     M.Button.findAndInstance($content);
+  
+                     /*
+                      TODO handle with yepnope?
+                     */
+                       
+                     $scripts.each(function(){
+                       var $script = $(this), scriptText = $script.text(), scriptNode = document.createElement('script');
+                       scriptNode.appendChild(document.createTextNode(scriptText));
+                       document.body.appendChild(scriptNode);
+                     });
+                     
+                     // Inform Google Analytics of the change
+                     if ( typeof window.pageTracker !== 'undefined' ) {
+                       window.pageTracker._trackPageview(relativeUrl);
+                     }
+                     //execute callback if exists
+                     if (callback && typeof callback == 'function') callback();
+                     
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                 document.location.href = url;
+                 return false;
+                }
+              })
+              
+            },
+            'default-url' : function(){}
+          }
+
+      state_data = state_data || {};
+      title = title || this.options.default_page_title;
+      
+      if (URL_types[page_type]) URL_types[page_type].call(this);
+      
+      M.Layout.ready(function(){
+        self.layout.resize();
+      });
+      
+      // if (page_type != 'ajax-url') History.pushState(state_data, title, url);
+    },
+    
+    go : function(url, title, data){
+      if (url == '#back') this.back();
+      else if (url == '#forward') this.forward();
+      else History.pushState(data, title, url);
+      return this;
+    },
+    
+    back : function(){
+      History.back();
+      return this;
+    },
+    
+    forward : function(){
+      History.forward();
+      return this;
+    },
+    
+    resize : function(){
+      // this.setSlidesWidths();
+      // this.iScroll.refresh();
+      // this.options.onresize.call(this, this.viewport_calculated_height, this.page_sections_content_heights);
+      return this;
+    }
+    
+  });
+  
+  
+  Zepto(function(){
+
+      window.Pages = new M.Page();
+
+    });
+  
+  
+  
+})($, window, document);

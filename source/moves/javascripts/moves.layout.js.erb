@@ -31,7 +31,7 @@
   
   M.Layout.defaults = {
     onresize : function(){
-      console.log('REFRESHHHH!!! SCROLLSSS', $('.scroll'));
+      console.log('REFRESHHHH!!! SCROLLSSS', $('.scroll') ,this);
       var that = this;
       $('.scroll').each(function(index){
         that.isCroll_instances[index].refresh();
@@ -41,9 +41,17 @@
     
   M.Layout.include({
     before_init : function(element, options){
+      var inst = element.data('M.Layout');
+      if (inst) {
+        this.already_instanciated = true;
+        return inst;
+      }else{
+       element.data('M.Layout', inst);
+      }
       this.options = $.extend( {}, M.Layout.defaults , options);
-      this.element = element || $('[data-role="page"]');
-      this.isCroll_instances = [];    
+      this.element = element || $('[data-role="page"]').first();
+      
+      this.isCroll_instances = [];
       
       $(window).on('resize', $.proxy(this.resize, this));
       console.log('init', this.element)
@@ -67,6 +75,9 @@
     */
     
     adjust : function(){
+      
+      console.log('ADJUST!!!!', this, this.element);
+      
       var hh = this.element.find('[data-role="header"]').first() || 0;
       var fh = this.element.find('[data-role="footer"]').last() || 0;
       

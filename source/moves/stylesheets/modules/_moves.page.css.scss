@@ -1,0 +1,92 @@
+// ============================
+// = with flexbox css3 module =
+// ============================
+
+.ui-page-active[data-role="page"] {
+  height:100%;
+  max-height:100%;
+  width:100%;
+  position:absolute;
+  overflow:hidden;
+  
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  
+  -webkit-box-orient: vertical;
+  	-moz-box-orient: vertical;
+  	box-orient: vertical;
+}
+
+
+[data-role="page"] > * {
+  
+  -webkit-box-flex: 1;
+  	-moz-box-flex: 1;
+  	box-flex: 1;
+}
+
+[data-role="content"] {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+}
+
+[data-role="content"] > [data-role="section"] {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+}
+
+
+
+
+
+
+[data-role="page"] {
+  display:none;
+}
+
+
+
+
+
+
+
+/*	Tablet Layout: 768px.
+		Inherits styles from: Default Layout.
+----------------------------------------------------------------- */
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+
+    [data-tablet-subpage]{
+      display:none;
+    }
+
+  //  [data-mobile-subpage]:first-child,
+    .ui-subpage-active[data-tablet-subpage] {
+      display:block;
+    }
+
+	
+}
+
+
+
+/*	Mobile Layout: 320px.
+		Inherits styles from: Default Layout.
+---------------------------------------------  */
+
+@media only screen and (max-width: 767px) {
+
+
+  [data-mobile-subpage]{
+    display:none;
+  }
+  
+//  [data-mobile-subpage]:first-child,
+  .ui-subpage-active[data-mobile-subpage] {
+    display:block;
+  }
+	
+}

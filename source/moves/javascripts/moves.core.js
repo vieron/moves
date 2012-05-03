@@ -1,5 +1,13 @@
 var moves = M = { dom : {}};
 
+//set device
+moves.device = ($(window).width() > 767) ? 'tablet' : 'mobile';
+$(document.body).addClass(moves.device+'-device');
+
+console.log(moves.device)
+
+moves.opts = {};
+
 // =====================
 // = Class constructor =
 // =====================
@@ -8,16 +16,19 @@ var Class = function(){
   var that = this,
       args = arguments,
       parent = (args[0] instanceof Class) ? args[0] : null,
-      opts = (args[0] instanceof Class != true ) ? args[0] : args[1] || null;
-      
+      opts = (args[0] instanceof Class != true ) ? args[0] || {} : args[1] || {};
+  
+  // called when invoked as a constructor with "new" for create instances
   var klass = function(){
      console.log('Class constructor invoked!!!');
      var inst_this = this,
          inst_arguments = arguments,
          initHandler = function(){
-           inst_this.init.apply(inst_this, inst_arguments)
+           if (!inst_this.already_instanciated) inst_this.init.apply(inst_this, inst_arguments);
          },
          t;
+     
+     this.already_instanciated = false;
      
      inst_this.before_init.apply(inst_this, inst_arguments);
      
@@ -38,17 +49,17 @@ var Class = function(){
   this.callbacks_queue = [];
   
   if (yepnope && opts.dependencies && opts.dependencies.length > 0){
-    var that = this;
     for (var i = opts.dependencies.length - 1; i >= 0; i--){
       console.log('DEPENDENCIE N:', i);
       if (!opts.dependencies[i].test || !opts.dependencies[i].callback ) return;
       var completeCallback = opts.dependencies[i].callback || function(){};
       opts.dependencies[i].callback = function(){
-        console.log('managing callback in Klass', this);
+        console.log('managing callback in Klass', this, that.callbacks_queue.length);
         that.isReady = true;
         for (var i = that.callbacks_queue.length - 1; i >= 0; i--){
+          console.log(callbacks_queue[i].valueOf());
           that.callbacks_queue[i].apply(that, args);
-        };;//end for
+        };//end for
         that.callbacks_queue = [];
         completeCallback();
       };//end callback fn
@@ -65,15 +76,14 @@ var Class = function(){
   
   
   
-  this.ready = function(callback){
+  klass.ready = function(callback){
     if (!callback && typeof callback != 'function') return this;
-    
-    if (this.isReady) {
-      callback.apply(this, arguments);
+    if (that.isReady) {
+      callback.apply(that, arguments);
     }else{
-      this.callbacks_queue.push( callback )
+      that.callbacks_queue.push( callback )
     }
-    return this;
+    return that;
   }
   
   

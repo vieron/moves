@@ -1,5 +1,11 @@
 * { box-sizing: border-box }
 
+.scroll ul {
+  margin:0;
+  padding:0;
+}
+
+
 /* ================== */
 /* = disable scroll = */
 /* ================== */
@@ -47,45 +53,26 @@ body {
   min-height:40px;
 }
 
-[data-role="page"] {
-  height:100%;
-  max-height:100%;
+
+
+
+//.ui-fixed-toolbars  [data-role="page"] {
+//  display:block;
+//}
+
+.ui-fixed-toolbars  [data-role="page"] {
+  max-height:none;
+  height:auto;
+}
+
+.ui-fixed-toolbars  [data-role="header"], 
+.ui-fixed-toolbars  [data-role="footer"] {
+  position:fixed;
   width:100%;
-  position:absolute;
-  overflow:hidden;
-  
-  display: -webkit-box;
-  display: -moz-box;
-  display: box;
-  
-  -webkit-box-orient: vertical;
-  	-moz-box-orient: vertical;
-  	box-orient: vertical;
+  z-index:100;
+  left:0;
 }
 
-
-[data-role="page"] > * {
-  
-  -webkit-box-flex: 1;
-  	-moz-box-flex: 1;
-  	box-flex: 1;
-  	
-}
-
-[data-role="content"] {
-  display: -webkit-box;
-  display: -moz-box;
-  display: box;
-}
-
-[data-role="content"] > [data-role="section"] {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  box-flex: 1;
-}
-
-.scroll ul {
-  margin:0;
-  padding:0;
-}
+.ui-fixed-toolbars  [data-role="header"] { top:0; } 
+.ui-fixed-toolbars  [data-role="footer"] { bottom:0; }
 

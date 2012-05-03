@@ -1,0 +1,98 @@
+// MARKUP:
+//
+//<div class="slider">   <---- this class required
+// <ul>
+//   <li></li>
+//   <li></li>
+//   <li></li>
+// </ul>
+//</div>
+
+
+;(function($, window, document, undefined ){
+  
+  // var opts = {
+  //   dependencies : [{
+  //       test : typeof History ,
+  //       yep : "<%= (settings.basepath+settings.js_dir+'/libs/zepto.history.js') %>",
+  //       callback : function(){
+  //         console.log('loaded zepto.history');
+  //       }
+  //   }]
+  // };
+  
+  // M.Slider = new Class(opts);
+  M.Button = new Class();
+  
+  M.Button.defaults = {
+    onresize : function(){}
+  };
+  
+  
+  //Class methods and properties
+  M.Button.extend({
+    add : function(){
+      
+    },
+    findAndInstance : function(context){
+      context || (context = $(document.body));
+      
+      context.find('[data-role="button"]').each(function(){
+        var $this = $(this);        
+        if ($this.attr('href') != '#') new M.Button($this);
+      });
+      
+    }
+  });
+  
+  
+  //Instance methods and properties
+  M.Button.include({
+    before_init : function(element, options){
+      var that = this;
+      this.options = $.extend( {}, M.Button.defaults , options);
+      this.element = element;
+      this.target = element.attr('href');
+      
+      
+      this.element.on('click', $.proxy(this.onTap, this))
+      $(window).on('resize', $.proxy(this.resize, this));
+      
+      // this.setSlidesWidths().createNextPrevNav().createPager();
+    },  
+    
+    init : function(element, options){
+      
+      
+      
+      
+      return this;
+    },
+    
+    onTap : function(e){
+      e.preventDefault();
+      
+      
+      Pages.go(this.target);
+
+    },
+    
+    
+    resize : function(){
+      // this.setSlidesWidths();
+      // this.iScroll.refresh();
+      // this.options.onresize.call(this, this.viewport_calculated_height, this.page_sections_content_heights);
+      return this;
+    }
+    
+  });
+  
+  
+  Zepto(function(){
+    
+    M.Button.findAndInstance();
+      
+  });
+  
+  
+})($, window, document);
