@@ -4,7 +4,6 @@ var moves = M = { dom : {}};
 moves.device = ($(window).width() > 767) ? 'tablet' : 'mobile';
 $(document.body).addClass(moves.device+'-device');
 
-console.log(moves.device)
 
 moves.opts = {};
 
